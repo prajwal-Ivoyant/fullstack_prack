@@ -1,16 +1,19 @@
 const express = require("express");
-const cors = require("cors");          
-require("dotenv").config();          
+const cors = require("cors");
+require("dotenv").config();
 
 const app = express();
 const connectDB = require("./src/config/database");
 
 connectDB();
 
-app.use(cors({
-  origin: "http://localhost:5173",     
-  credentials: true,
-}));
+app.use(
+  cors({
+    origin: "http://localhost:5173",
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+  })
+);
 
 app.use(express.json());
 
