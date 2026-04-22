@@ -2,7 +2,7 @@ const User = require("../models/users");
 const bcrypt = require("bcryptjs");
 const jwt= require('jsonwebtoken');
 
-exports.register = async (req, res) => {
+const register = async (req, res) => {
     const {email, password} = req.body;
 
     const hashed = await bcrypt.hash(password, 10);
@@ -15,7 +15,7 @@ exports.register = async (req, res) => {
     res.json(`${user} ADDED TO DB`)
 }
 
-exports.login = async (req, res) => {
+const login = async (req, res) => {
   try {
     const { email, password } = req.body;
 
@@ -42,3 +42,5 @@ exports.login = async (req, res) => {
     res.status(500).json({ msg: "Server error" });
   }
 };
+
+module.exports = {login, register}
