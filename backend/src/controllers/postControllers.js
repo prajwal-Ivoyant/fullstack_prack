@@ -1,6 +1,6 @@
 const Post = require("../models/post")
 
-exports.createPost = async (req, res) => {
+const createPost = async (req, res) => {
   try {
     const { title, content } = req.body;
 
@@ -30,7 +30,7 @@ exports.createPost = async (req, res) => {
   }
 };
 
-exports.getPosts = async (req, res) => {
+const getPosts = async (req, res) => {
   try {
     const posts = await Post.find().populate("user", "email");
 
@@ -54,7 +54,7 @@ exports.getPosts = async (req, res) => {
   }
 };
 
-exports.updatePost = async (req, res) => {
+const updatePost = async (req, res) => {
   try {
     if (!req.params.id) {
       return res.status(400).json({
@@ -89,7 +89,7 @@ exports.updatePost = async (req, res) => {
 };
 
 
-exports.deletePost = async (req, res) => {
+const deletePost = async (req, res) => {
   try {
 
     if (!req.params.id) {
@@ -123,3 +123,5 @@ exports.deletePost = async (req, res) => {
     });
   }
 };
+
+module.exports = {deletePost,updatePost,getPosts,createPost}
