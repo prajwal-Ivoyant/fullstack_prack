@@ -1,136 +1,100 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Card, Form, Input, Button, Typography, message } from "antd";
 import {
-  useLoginMutation,
-  useRegisterMutation,
+    useLoginMutation,
+    useRegisterMutation,
 } from "../services/authApi";
 import { useNavigate } from "react-router-dom";
 
 const { Title, Text } = Typography;
 
 export default function AuthPage() {
-  const [isLogin, setIsLogin] = useState(true);
-  const [form] = Form.useForm();
+    const [isLogin, setIsLogin] = useState(true);
 
-  const [login, { isLoading: loginLoading }] = useLoginMutation();
-  const [register, { isLoading: registerLoading }] =
-    useRegisterMutation();
+    const [login, { isLoading: loginLoading }] = useLoginMutation();
+    const [register, { isLoading: registerLoading }] =
+        useRegisterMutation();
 
-  const navigate = useNavigate();
+    const navigate = useNavigate();
 
-  // ✅ Auto redirect if already logged in
-  useEffect(() => {
-    const token = localStorage.getItem("token");
-    if (token) {
-      navigate("/posts");
-    }
-  }, [navigate]);
+    const onFinish = async (values: {
+        email: string;
+        password: string;
+    }) => {
+        try {
+            if (isLogin) {
+                const res = await login(values).unwrap();
+                console.log("LOGIN RESPONSE:", res);
 
-  const onFinish = async (values: {
-    email: string;
-    password: string;
-  }) => {
-    try {
-      if (isLogin) {
-        const res = await login(values).unwrap();
+                localStorage.setItem("token", res.token);
 
-        // ⚠️ For production → use httpOnly cookies instead
-        localStorage.setItem("token", res.token);
+                message.success("Login successful");
+                navigate("/posts");
 
-        message.success("Login successful");
-        navigate("/posts");
-      } else {
-        await register(values).unwrap();
+            } else {
+                await register(values).unwrap();
 
-        message.success("Registered successfully");
-        setIsLogin(true);
-        form.resetFields();
-      }
-    } catch (err: any) {
-      console.error("AUTH ERROR:", err);
+                message.success("Registered successfully");
+                setIsLogin(true);
+            }
+        } catch (err: any) {
+            console.error(err);
+            message.error(err?.data?.msg || "Something went wrong");
+        }
+    };
 
-      const errorMsg =
-        err?.data?.message ||
-        err?.data?.msg ||
-        err?.error ||
-        "Unexpected error occurred";
+    return (
+        <div >
+            <Card style={{ width: 300, margin: "175px auto" }}>
+                <Title level={3} style={{ textAlign: "center" }}>
+                    {isLogin ? "Login" : "Register"}
+                </Title>
 
-      message.error(errorMsg);
-    }
-  };
+                <Form layout="vertical" onFinish={onFinish}>
+                    <Form.Item
+                        label="Email"
+                        name="email"
+                        rules={[
+                            { required: true, message: "Email is required" },
+                            { type: "email", message: "Enter valid email" },
+                        ]}
+                    >
+                        <Input placeholder="Enter email" />
+                    </Form.Item>
 
-  return (
-    <div
-      style={{
-        height: "100vh",
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-        background: "#f5f5f5",
-      }}
-    >
-      <Card style={{ width: 350 }}>
-        <Title level={3} style={{ textAlign: "center" }}>
-          {isLogin ? "Login" : "Register"}
-        </Title>
+                    <Form.Item
+                        label="Password"
+                        name="password"
+                        rules={[
+                            { required: true, message: "Password is required" },
+                            { min: 6, message: "Min 6 characters" },
+                        ]}
+                    >
+                        <Input.Password placeholder="Enter password" />
+                    </Form.Item>
 
-        <Form
-          form={form}
-          layout="vertical"
-          onFinish={onFinish}
-          autoComplete="off"
-        >
-          <Form.Item
-            label="Email"
-            name="email"
-            rules={[
-              { required: true, message: "Email is required" },
-              { type: "email", message: "Enter valid email" },
-            ]}
-          >
-            <Input placeholder="Enter email" />
-          </Form.Item>
+                    <Button
+                        type="primary"
+                        htmlType="submit"
+                        block
+                        loading={isLogin ? loginLoading : registerLoading}
+                    >
+                        {isLogin ? "Login" : "Register"}
+                    </Button>
+                </Form>
 
-          <Form.Item
-            label="Password"
-            name="password"
-            rules={[
-              { required: true, message: "Password is required" },
-              { min: 6, message: "Min 6 characters" },
-            ]}
-          >
-            <Input.Password placeholder="Enter password" />
-          </Form.Item>
-
-          <Button
-            type="primary"
-            htmlType="submit"
-            block
-            loading={isLogin ? loginLoading : registerLoading}
-            disabled={loginLoading || registerLoading}
-          >
-            {isLogin ? "Login" : "Register"}
-          </Button>
-        </Form>
-
-        <div style={{ marginTop: 15, textAlign: "center" }}>
-          <Text>
-            {isLogin
-              ? "Don't have an account?"
-              : "Already have an account?"}
-          </Text>
-
-          <Button
-            type="link"
-            onClick={() => {
-              setIsLogin(!isLogin);
-              form.resetFields(); // ✅ clear old inputs
-            }}
-          >
-            {isLogin ? "Register" : "Login"}
-          </Button>
+                <div style={{ marginTop: 15, textAlign: "center" }}>
+                    <Text>
+                        {isLogin
+                            ? "Don't have an account?"
+                            : "Already have an account?"}
+                    </Text>
+                    <Button type="link" onClick={() => setIsLogin(!isLogin)}>
+                        {isLogin ? "Register" : "Login"}
+                    </Button>
+                </div>
+            </Card>
         </div>
-      </Card>
-    </div>
-  );
+    );
 }
+
