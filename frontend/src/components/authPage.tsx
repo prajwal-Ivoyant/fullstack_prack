@@ -8,7 +8,7 @@ import { useNavigate } from "react-router-dom";
 
 const { Title, Text } = Typography;
 
-export default function AuthPage() {
+export default function AuthPage({ setToken }: any) {
     const [isLogin, setIsLogin] = useState(true);
 
     const [login, { isLoading: loginLoading }] = useLoginMutation();
@@ -24,10 +24,14 @@ export default function AuthPage() {
         try {
             if (isLogin) {
                 const res = await login(values).unwrap();
-               
+
                 localStorage.setItem("token", res.token);
+                setToken(res.token); 
 
                 message.success("Login successful");
+                navigate("/posts");
+                message.success("Login successful");
+
                 navigate("/posts");
 
             } else {
