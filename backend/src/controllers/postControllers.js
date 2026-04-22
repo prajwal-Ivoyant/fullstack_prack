@@ -14,7 +14,7 @@ const createPost = async (req, res) => {
     const post = await Post.create({
       title,
       content,
-      user: req.user,
+      user: req.user.id,
     });
 
     res.status(201).json({

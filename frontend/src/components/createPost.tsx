@@ -27,7 +27,7 @@ export default function CreatePost() {
       <h3>Create Post</h3>
 
       <Form layout="vertical" form={form} onFinish={onFinish}>
-        {/* TITLE */}
+      
         <Form.Item
           label="Title"
           name="title"
@@ -45,7 +45,6 @@ export default function CreatePost() {
           <Input placeholder="Enter title" />
         </Form.Item>
 
-        {/* CONTENT */}
         <Form.Item
           label="Content"
           name="content"
@@ -63,7 +62,6 @@ export default function CreatePost() {
           <Input.TextArea rows={4} placeholder="Enter content" />
         </Form.Item>
 
-        {/* BUTTON */}
         <Button
           type="primary"
           htmlType="submit"
