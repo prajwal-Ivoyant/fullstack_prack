@@ -24,8 +24,7 @@ export default function AuthPage() {
         try {
             if (isLogin) {
                 const res = await login(values).unwrap();
-                console.log("LOGIN RESPONSE:", res);
-
+               
                 localStorage.setItem("token", res.token);
 
                 message.success("Login successful");
