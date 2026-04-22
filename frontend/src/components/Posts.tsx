@@ -71,7 +71,7 @@ export default function Posts() {
 
       <CreatePost />
 
-      <p>No posts yet. Create one 🚀</p>
+      <p>No posts yet</p>
     </div>
   );
 }
