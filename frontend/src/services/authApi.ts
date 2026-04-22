@@ -3,7 +3,7 @@ import {api} from "./api";
 export const authApi = api.injectEndpoints({
     endpoints : (builder) => ({
         login: builder.mutation<
-        {tocken : string},
+        {token : string},
         {email:string, password:string}
         >({
             query : (body) => ({
