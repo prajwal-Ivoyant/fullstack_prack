@@ -8,7 +8,7 @@ const app = express();
 
 app.use(
   cors({
-    origin: ["https://simple-practice.netlify.app"],
+    origin: ["https://glowing-panda-adf795.netlify.app/"],
     credentials: true,
   })
 );
