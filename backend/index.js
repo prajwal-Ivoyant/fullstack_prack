@@ -7,11 +7,14 @@ const connectDB = require("./src/config/database");
 
 connectDB();
 
+const cors = require("cors");
+
 app.use(
   cors({
-    origin: "https://simple-prack.netlify.app/",
-    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-    allowedHeaders: ["Content-Type", "Authorization"],
+    origin: [
+      "https://simple-practice.netlify.app",
+    ],
+    credentials: true,
   })
 );
 
