@@ -62,6 +62,20 @@ export default function Posts() {
   if (isError)
     return <Alert type="error" message="Failed to load posts" />;
 
+  if (!isLoading && data?.length === 0) {
+  return (
+    <div style={{ padding: 20 }}>
+      <Button danger onClick={handleLogout} style={{ marginBottom: 20 }}>
+        Logout
+      </Button>
+
+      <CreatePost />
+
+      <p>No posts yet. Create one 🚀</p>
+    </div>
+  );
+}
+
   return (
     <div style={{ padding: 20 }}>
      
