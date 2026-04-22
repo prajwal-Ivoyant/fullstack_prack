@@ -34,13 +34,6 @@ const getPosts = async (req, res) => {
   try {
     const posts = await Post.find().populate("user", "email");
 
-    if (!posts.length) {
-      return res.status(404).json({
-        success: false,
-        message: "No posts found",
-      });
-    }
-
     res.json({
       success: true,
       data: posts,
