@@ -8,7 +8,7 @@ const {
   deletePost,
 } = require("../controllers/postControllers");
 
-router.use(auth);
+
 
 router.post("/", createPost);
 router.get("/", getPosts);
